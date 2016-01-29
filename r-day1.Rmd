@@ -1,0 +1,603 @@
+---
+title: "GSPP R Tutorial Day 1"
+author: "Chris Kennedy"
+date: "January 29, 2016"
+output: html_document
+results: hold
+---
+
+Goals
+
+* Learn enough R so that the language is not a barrier.
+* But get to useful data analysis as soon as possible.
+* Go slowly - we will leave no student behind.
+* Participation - learn by doing.
+
+Acknowledgements: inspired by materials by Chris Paciorek, Rochelle Terman, Alex Hanna, et al.
+
+**Pop quiz!**
+
+# R as a calculator 
+
+Reviewing some of the material from R Notes, we can use R to calculate. R will print out the results automatically.
+
+```{r}
+# Add two numbers.
+2 + 3
+# Multiply by a constant.
+4 * pi
+```
+
+**Class Question**: does anyone know what the [1] means?
+
+"#" denotes a comment, so R will not execute anything on a line after a "#". Comments can go on their own line OR can be put on the same line as a command. Put them on their own line if the comment is long.
+
+Quickly reviewing a few more R calculations:
+
+```{r}
+3^7
+sqrt(6)
+log(10) # e^x = 10
+exp(2.3) # This is e^2.3
+```
+
+# Assigning values to an R variable
+
+We can use variables (aka "objects") to store values and re-use them. Variable names are case-sensitive, and should only consist of letters, numbers, underscores, and periods. 
+
+`<-` is the assignment operator and saves the value on the right to the variable on the left. If the variable doesn't exist then R will create the variable automatically. If that variable already exists then it will update the value. 
+
+If a command is not an assignment R will print the command's result automatically, but we can also use the `print` function to be more explicit.
+
+```{r}
+my_var <- TRUE # This line is an assignment, so no output will be displayed.
+my_var         # This is not an assignment, so R prints the value of my_var.
+print(my_var)  # We can be more explicit and tell R to output the value.
+
+another.var = "periods can be in variable names but are kind of a weird R thing"
+another.var
+```
+
+We will get an error if we start using a variable name without assigning it a value.
+
+```{r eval=T, error=T}
+never_assigned_this_var   
+```
+
+Notice in the `Environment` tab of RStudio that we can see those newly created variables. We can also list which variables and functions are currently defined.
+
+```{r}
+ls()
+```
+
+We can use = or <- to assign a value. <- is more traditional in R, but = is used in other languages like Stata or Python. There are other minor differences that we won't get into now.
+
+```
+another_var = 3
+another_var
+```
+
+# Vectors
+
+R is built to make vectors easy to use. Let's make a vector of the numbers 1 through 100.
+```{r}
+vec <- 1:100
+vec
+```
+
+Because this is a lot of output, we should see the results go to the next line. When that happens, R will let you know which element number the line begins with. That's the number in the brackets at the beginning of each line.
+
+`length()` lets us check how many elements are in the vector.
+
+```{r}
+length(vec)
+```
+
+We can easily determine the sum, mean, maximum, or minimum of a vector.
+
+```{r}
+sum(vec)
+mean(vec)
+max(vec)
+min(vec)
+```
+
+Or we can get all these statistics (and more!) from the `summary` function. `summary` is a helpful way to get a sense of a variable's values.
+
+```{r}
+summary(vec)
+```
+
+We might also want to learn the standard deviation or variance of a variable.
+
+```{r}
+sd(vec)
+var(vec)
+```
+
+We can generate 10 random numbers between 0 and 1 from the uniform distribution and run these same functions.
+
+```{r}
+# We always set the seed so that the exact random numbers generated are the same each time we run this.
+set.seed(1) 
+random_uniform <- runif(10)
+random_uniform
+```
+
+*You try*: what is the mean of the random_uniform vector? What is the sum?
+
+## seq()
+
+The function `seq` allows for more customized sequences of numbers. Let's do 1 to 200, increasing by 2 each time.
+```{r}
+seq(1, 200, 2)    # R will print this automatically
+```
+
+Here we see that it stops at 199 because 2 more than 199 is more than 200, our specified maximum.
+
+In order to use that function we had to remember the order that `seq()` expects its inputs, or "function arguments." To double-check, we can check the help page for `seq` and review the "Usage" section.
+
+```{r}
+?seq
+help(seq)
+```
+
+When running a function you can specify the arguments in the order that they are expected, OR you can tell the function the name of each argument and pass them in any order you like.
+
+From the help page `seq` shows us that if we don't specify the argument names, it expects the argument order to be: start of the sequence, end of the sequence, and then how many numbers to skip (2 in our previous example).
+
+If we don't remember the order but we remember the argument names, we can specify them directly and not worry that we passed the arguments in the wrong order.
+
+So we could run `seq` and first specify the ending number for the sequence as long as we note that it is the "to" argument.
+```{r}
+seq(to = 200, from = 1, by = 2)
+```
+
+When specifying function arguments by name you need to use "=" rather than "<-". Let's double-check.
+
+```{r, eval=F}
+seq(to <- 200, from <- 1, by <- 2)
+```
+
+Error message! Notice that in our environment window, we now have variables "by", "from", and "to". When R saw <- it thought we wanted to create variables. So to avoid that interpretation we need to use "=".
+
+We can ask R to list the currently defined variables, rather than looking at the environment window in RStudio.
+
+```{r eval=F}
+ls()
+```
+
+Let's delete those extra variables that were created.
+
+```{r, eval=F}
+rm(by, from, to)
+```
+
+Or we could delete everything in our environment.
+
+```{r}
+rm(list=ls())
+```
+
+
+# Creating vectors
+
+What if we want to specify every element of the vector, rather than only generate sequences? `c` let's us create vectors from scratch.
+
+```{r}
+1:3
+c(1, 2, 3)
+c(1983, 1945, 2008, 2016)
+```
+Every element in a vector needs to be the same type. So the vector could be all numbers or all character strings, but not both. R will internally convert the numbers into strings if both are in a vector.
+
+```{r}
+c("monday", "tuesday", "friday")
+c("monday", "tuesday", "friday", 3.5, 6)
+c(1:3, "four")
+```
+
+`TRUE` and `FALSE` are of type "boolean". 
+
+```{r}
+c(TRUE, FALSE, 1, 0)
+```
+
+R can automatically convert TRUE to 1 and FALSE to 0, which is sometimes handy.
+
+```{r}
+sum(c(TRUE, TRUE, FALSE))
+mean(c(TRUE, FALSE, FALSE, TRUE))
+mean(c(T, F, F, T))
+```
+
+c() is also used to combine elements or vectors.
+
+```{r}
+c(10:4, 3:1)
+c(c(1, 3, 2), c(4, 6, 5))
+```
+
+# rep()
+
+`rep()` is a related function that repeats an R variable a certain number of times.
+
+```{r}
+rep(5, 3)
+rep("gspp", 6)
+```
+
+Even better is to use `rep` on vectors:
+
+```{r}
+rep(c(1, 2, 3), 3)
+```
+
+As you saw in problem set 1, the "each" argument can repeat each of the elements in the input vector to keep them organized together rather than interspersed.
+
+```{r}
+rep(c(1, 2, 3), each=3)
+```
+
+Or we can specify different numbers of repetitions for each element, e.g. if we are running a randomized trial.
+
+```{r}
+rep(c(1, 2, 3), times = c(3, 5, 7))
+```
+
+Again from problem set 1, we can create an empty vector by repeating NAs. In R "NA" refers to a missing value, similar to "." in Stata.
+
+```{r}
+empty_vec = rep(NA, 10)
+empty_vec
+length(empty_vec)
+```
+
+# Subsetting vectors
+
+We can access a specific element of a vector using brackets [] and referring to the order of the element. This can be used to check the value of the element, or to assign the value.
+
+```{r}
+empty_vec[1]       # Check the value of the first element of the vector.
+empty_vec[1] <- 5  # Update the value of that element
+empty_vec[2] = 6   # Either assignment operator works.
+empty_vec
+```
+
+We can multiple elements within the brackets to display or modify multiple elements at once.
+
+```{r}
+another_vec = c(6, 3, NA, 5, 10)
+another_vec
+another_vec[c(1, 2)]
+
+small_vec = another_vec[c(1, 2)]
+small_vec
+
+another_vec[c(1, 2)] = c(1985, 2000)
+another_vec
+```
+
+We can pass in a series of TRUEs and FALSEs to specify exactly each element that we want.
+```{r}
+# This says to return the 1st and 3rd elements of the vector.
+another_vec[c(TRUE, FALSE, TRUE, FALSE, FALSE)]
+```
+
+## Logical expressions for vectors
+
+R makes it simple to apply a logical expression to every element of a vector. 
+
+```{r}
+set.seed(1)
+#  Draw 5 numbers uniformly between 1 and 10.
+some_nums <- runif(5, 1, 10) 
+some_nums
+# Which are greater than 6?
+some_nums > 5
+# And how many are greater than 6? Here TRUE is automatically converted to 1 and FALSE to 0.
+sum(some_nums > 5)
+```
+
+If we use those TRUEs and FALSEs within the brackets we can access the elements where the logical expression is true.
+
+
+```{r}
+# Get the TRUEs and FALSEs and save them to a new vector.
+numbers_greater_than_five = some_nums > 5
+numbers_greater_than_five
+# Now choose those elements in the original vector that are TRUE.
+some_nums[numbers_greater_than_five]
+# Or put the logical expression directly into the brackets.
+some_nums[some_nums > 5]
+```
+
+Instead of TRUEs and FALSEs, we can save the element numbers that mean the test using `which`. Then we can use those element numbers (aka indices) to pull out just those entries.
+
+```{r}
+some_nums
+
+# Indices for the numbers less than or equal to 4.
+numbers_below_4 = which(some_nums <= 4)
+numbers_below_4
+
+# Now return just those elements.
+some_nums[numbers_below_4]
+
+# We can skip the intermediate variable and just put the which inside brackets.
+some_nums[which(some_nums <= 4)]
+
+# But it's simpler to not use the which:
+some_nums[some_nums <= 4]
+
+# These are equivalent to:
+some_nums[c(1, 2)]
+
+```
+
+With those basics covered we can move on to **data frames**.
+
+# Data Frames
+
+A data frame is basically like an excel spreadsheet: it's a dataset with a certain number of observations  (or rows) and one or more variables (or columns) for each observation.
+
+If we have multiple vectors that are the same length, we can treat each one as a column and combine them to create a data frame.
+
+```{r}
+# Create the vectors.
+var1 = 10:1
+var2 = rep(c("A", "B"), 5)
+var3 = rnorm(10) 
+
+# Each vector becomes a column or variable in the dataframe.
+my_dataframe <- data.frame(var1, var2, var3)
+
+# Display the dataframe.
+my_dataframe
+
+```
+
+The extra 1 through 10 on the far left is R displaying the number of each observation.
+
+In the `Environment` tab of RStudio we now see a section for `Data`, and `my_dataframe` listed as having 10 observations with 3 variables.
+
+Let's examine the features of the dataframe.
+
+```{r}
+# How many observations are in the dataframe?
+nrow(my_dataframe)
+
+# How many variables or columns are in the dataframe?
+ncol(my_dataframe)
+length(my_dataframe) # Another way to get the same thing.
+
+# Show both dimensions of the dataframe - how many rows (observations) and columns (variables).
+dim(my_dataframe)
+
+# Show the names of the variables in the dataframe.
+names(my_dataframe)
+
+# Show quick summary statistics on each variable in the dataframe.
+summary(my_dataframe)
+```
+
+When we create the dataframe we can specify new names for each variable.
+
+```{r}
+# Each vector becomes a column or variable in the dataframe.
+my_dataframe2 <- data.frame(new_name1 = var1, new_name2 = var2, new_name3 = var3)
+my_dataframe2
+```
+
+A nice advantage of R over Stata is that we can have multiple dataframes open simultaneously.
+
+# Subsetting dataframes
+
+We can use a dollar sign to extract a single variable (or column) from the dataframe, which will be returned as a vector.
+
+```{r}
+# Display the var1 column from the dataframe.
+my_dataframe$var1
+# Save var1 to a separate vector.
+var1_vec = my_dataframe$var1
+var1_vec
+```
+
+Because the `$` returns a vector, we can tack on brackets to pull out certain elements just like we did earlier.
+
+```{r}
+# Select only the 3rd and 4th elements from the var3 vector.
+my_dataframe$var3[3:4]
+```
+
+We can also use `$` to add new variables to a dataframe. They will need to be vectors of the same 
+
+We can use brackets on the original dataframe to select certain rows and certain variables at the same time. When we use the brackets we first specify which rows we want, then which columns.
+
+Let's do the same operation again, but this time without the `$`.
+
+```{r}
+# Return observations 3 and 4, and just the variable "var3".
+my_dataframe[3:4, "var3"]
+```
+
+To return multiple variables we use `c()` when selecting the columns we want.
+
+```{r}
+my_dataframe[3:4, c("var1", "var3")]
+```
+
+If we select multiple variables we get a dataframe back rather than a vector.
+
+If we don't specify which rows we want, R will return all rows.
+
+```{r}
+my_dataframe[, "var3"]
+```
+
+Similarly, if we don't specify which columns we want, R will return all of the variables for those observations.
+
+```{r error=T}
+my_dataframe[9:10, ]
+# If you forget the comma you will get an error:
+my_dataframe[9:10]
+```
+
+If we don't specify either then we just get the original dataframe.
+
+```{r}
+my_dataframe[, ]
+my_dataframe[]
+```
+
+Now let's look at var2.
+
+```{r}
+my_dataframe$var2
+var2
+```
+
+**Class Question**: does anyone know why it shows us "levels" A B?
+
+When we create a dataframe with a character string vector, R converts it to a factor automatically. A factor is a set of numeric codes that correspond to string values. (R does this because it allows for faster computations and requires less computer memory.)
+
+If we want to convert it back to a character string, we can use `as.character()`.
+
+```{r}
+# Display var2 as a string rather than factor.
+as.character(my_dataframe$var2)
+var2
+
+# Save the result to a new column in the dataframe.
+my_dataframe$var2_str = as.character(my_dataframe$var2)
+
+my_dataframe
+```
+
+We used the `$` operator to create a new column (variable) and set it to the string version of var2.
+
+If we want to double-check the type of each variable, we use the `class` function.
+
+```{r}
+class(my_dataframe$var1)
+class(my_dataframe$var2)
+class(my_dataframe$var3)
+class(my_dataframe$var2_str)
+```
+
+We can even run `class` on the dataframe.
+
+```{r}
+class(my_dataframe)
+```
+
+# Basic data analysis
+
+We learned `summary` but how can we learn more about a categorical variable? `table` shows us the frequency distribution of the variable.
+
+```{r}
+table(my_dataframe$var1)
+table(my_dataframe$var2)
+table(my_dataframe$var3)   # Not great for continuous variables.
+```
+
+If we also use `prop.table` we can get percentages instead of counts.
+```{r}
+prop.table(table(my_dataframe$var2))
+```
+
+We can use table with two variables to generate a cross-tabulation.
+
+```{r}
+table(my_dataframe$var1, my_dataframe$var2)
+prop.table(table(my_dataframe$var1, my_dataframe$var2))
+# We can label the rows and columns if we wish.
+table("rows" = my_dataframe$var1, "cols" = my_dataframe$var2)
+```
+
+Finally, let's do a quick histogram of our continuous variable.
+
+```{r}
+library(ggplot2)
+qplot(my_dataframe$var3)
+```
+
+# Importing data
+
+We can use the `haven` package to import data from Stata, SPSS, or SAS (good idea Avi).
+
+First, we want to install it using `install.packages`:
+
+```{r eval=F}
+install.packages("haven")
+```
+
+If you forget the quotes, R will look for a variable called "haven".
+
+```{r error=T}
+install.packages(haven)
+```
+
+After installing a package, use `library` to load it. Quotes are optional.
+
+```{r}
+library(haven)
+library("haven")  # Either way is fine.
+```
+
+**Class Question**: How can we figure out what functions haven provides?
+
+To get help on a package, we can't use `?` or `help` in exactly the same way.
+
+```{r}
+?haven
+help(haven)
+??haven
+```
+
+Instead we need to specify that we're looking for a package.
+
+```{r}
+help(package=haven)
+```
+
+We can use read_dta to import a Stata file on our computer or the web.
+
+```{r}
+data = read_dta("http://www.ats.ucla.edu/stat/stata/examples/chp/p150.dta")
+class(data)     # Notice that it is a dataframe as well as two other classes.
+names(data)
+dim(data)
+summary(data)
+```
+
+To import data from our computer, we would want to know what folder R is running from - our working directory.
+
+```{r}
+getwd()
+```
+
+If we put the .dta file into that directory, then we can load it by just specifying the file name.
+
+```{r eval=F}
+# R will look for example.dta in the folder displayed by getwd().
+data = read_dta("example.dta")
+```
+
+If the file is in another directory, we will need to tell R exactly where to look.
+
+```{r eval=F}
+data <- read_dta("/Users/username/Downloads/downloaded_file.dta")
+```
+
+If we have a CSV or tab-delimited file, we can use the foreign package.
+
+```{r}
+library(foreign)
+# Read a tab-delimited file - this one on educational expenditures.
+data = read.delim("http://www.ats.ucla.edu/stat/examples/chp/p189.txt")
+```
+
+# Questions / Review
+
+That's all for today, well done!
