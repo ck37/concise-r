@@ -284,6 +284,17 @@ We can pass in a series of TRUEs and FALSEs to specify exactly each element that
 another_vec[c(TRUE, FALSE, TRUE, FALSE, FALSE)]
 ```
 
+If we pass in negative indices (element order number) we will get every element except those elements.
+
+```{r}
+# Return all elements except the first element.
+another_vec[-1]
+# Return all elements except the 3 and 5th.
+another_vec[-c(3, 5)]
+# Same thing, but a little less clean.
+another_vec[c(-3, -5)]
+```
+
 ## Logical expressions for vectors
 
 R makes it simple to apply a logical expression to every element of a vector. 
@@ -335,6 +346,19 @@ some_nums[c(1, 2)]
 
 ```
 
+We can combine multiple logical statements using `&` (AND) or `|` (OR).
+
+```{r}
+# Numbers less than 4 or greater than 5.
+some_nums[some_nums < 4 | some_nums > 5]
+
+# Numbers greater than 4 and less than 5.
+some_nums[some_nums > 4 & some_nums < 5]
+
+# Numbers less than 4 AND greater than 5.
+some_nums[some_nums < 4 & some_nums > 5]
+```
+
 With those basics covered we can move on to **data frames**.
 
 # Data Frames
@@ -357,7 +381,7 @@ my_dataframe
 
 ```
 
-The extra 1 through 10 on the far left is R displaying the number of each observation.
+The extra 1 through 10 on the far left is R displaying the number of each observation, which is saved as the "rowname" for the observation when the dataframe is created.
 
 In the `Environment` tab of RStudio we now see a section for `Data`, and `my_dataframe` listed as having 10 observations with 3 variables.
 
@@ -387,6 +411,14 @@ When we create the dataframe we can specify new names for each variable.
 # Each vector becomes a column or variable in the dataframe.
 my_dataframe2 <- data.frame(new_name1 = var1, new_name2 = var2, new_name3 = var3)
 my_dataframe2
+```
+
+We can modify the names of the variables in an existing dataframe using `names()`.
+
+```{r}
+names(my_dataframe2) = c("x1", "x2", "x3")
+my_dataframe2
+names(my_dataframe2)
 ```
 
 A nice advantage of R over Stata is that we can have multiple dataframes open simultaneously.
@@ -450,6 +482,26 @@ my_dataframe[, ]
 my_dataframe[]
 ```
 
+We can "remove" rows by extracting a part of the dataframe that excludes those rows and then re-saving it to the original dataframe.
+
+```{r}
+# Let's look at observations 4 and 8
+my_dataframe[c(4, 8), ]
+
+# Now let's exclude those observations and re-assign the data frame.
+my_dataframe <- my_dataframe[-c(4, 8), ]
+
+my_dataframe
+```
+
+We can use `subset` to check multiple columns and return the result. It saves a little typing because we don't have to specify the dataframe each time.
+
+```{r}
+my_dataframe
+# Normally we would need to use $, but with the subset function we don't.
+subset(my_dataframe, var2 == "A" & var1 > 5)
+```
+
 Now let's look at var2.
 
 ```{r}
@@ -469,6 +521,7 @@ as.character(my_dataframe$var2)
 var2
 
 # Save the result to a new column in the dataframe.
+# Alternatively we could overwrite the existing column.
 my_dataframe$var2_str = as.character(my_dataframe$var2)
 
 my_dataframe
@@ -489,6 +542,12 @@ We can even run `class` on the dataframe.
 
 ```{r}
 class(my_dataframe)
+```
+
+Or `str` can tell us the class for each variable in the dataframe and show some example values of each variable.
+
+```{r}
+str(my_dataframe)
 ```
 
 # Basic data analysis
@@ -590,15 +649,21 @@ If the file is in another directory, we will need to tell R exactly where to loo
 data <- read_dta("/Users/username/Downloads/downloaded_file.dta")
 ```
 
-If we have a CSV or tab-delimited file, we can use the foreign package.
+If we have a CSV or tab-delimited file, we can use the readr package.
 
-```{r}
-library(foreign)
-# Read a tab-delimited file - this one on educational expenditures.
-data = read.delim("http://www.ats.ucla.edu/stat/examples/chp/p189.txt")
-# Use read.csv for CSV files.
+```{r eval=F}
+install.packages("readr")
 ```
 
-# Questions / Review
+```{r}
+library(readr)
+# Read a tab-delimited file - this one on educational expenditures.
+data = read_tsv("http://www.ats.ucla.edu/stat/examples/chp/p189.txt")
+# Use read_csv for CSV files.
+```
+
+# Questions / Review / Additional Dataset Exercises
+
+[May want to distribute the extra datafiles and do some exercises]
 
 That's all for today, well done!
