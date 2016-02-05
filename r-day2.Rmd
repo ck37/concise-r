@@ -1,0 +1,440 @@
+---
+title: "GSPP R Tutorial Day 2"
+author: "Chris Kennedy"
+date: "February 2, 2016"
+output: html_document
+---
+
+Start with an exercise from day 1
+
+[Review function vs vector vs. element vs. characters ]
+
+[Use dataset that is more fun, like the imdb dataset.]
+
+# Load a new dataset
+```{r}
+library(readr)
+# Via https://github.com/fivethirtyeight/data/blob/master/bad-drivers/bad-drivers.csv
+# https://raw.githubusercontent.com/fivethirtyeight/data/master/bad-drivers/bad-drivers.csv
+data = read_csv("http://is.gd/gspp_2016")
+names(data)
+names(data) <- c("state", "fatal", "speeding", "alcohol", "not_distracted", "no_prev",
+                    "premium", "losses")
+str(data)
+```
+
+**Class Practice**
+
+* How many rows and columns in the dataset?
+* What is the variable type for each column?
+* What do the distributions look like?
+* Can you plot histograms for the continuous variables?
+* How many observations per state are there?
+
+```{r}
+table(data$state)
+```
+
+# missing values - is.na, na.rm
+```{r}
+is.na(c(1, 2, 3))
+is.na(c(1, NA, 3))
+
+is.na(data$alcohol)
+```
+** How do we count how many of those are TRUEs?
+
+```{r}
+sum(is.na(data[, 1]))
+sum(is.na(data[, "fatal"]))
+sum(is.na(data[, "speeding"]))
+```
+
+Let's see a few values to missing for all columns except state.
+
+```{r}
+data[c(3, 7, 17, 37), -1] <- NA
+```
+
+Now do we find missing values?
+
+```{r}
+apply(data, MARGIN=2, FUN=function(x){ sum(is.na(x)) })
+```
+
+With missing data, what's the mean fatality rate?
+```{r}
+mean(data$fatal)
+mean(data$fatal, na.rm=T)
+```
+
+For safety, R returns an NA for mathematical functions when it is passed in data with missing values. The `na.rm` option tells R that it can omit the NAs and give us the result.
+
+# More data frames
+
+Adding a column to our dataframe.
+```{r}
+set.seed(1)
+rand = rnorm(nrow(data))
+length(rand)
+
+data = cbind(data, rand)
+dim(data)
+names(data)
+data$rand
+```
+
+Creating a dataframe from two individual vectors.
+
+```{r}
+state = data$state
+dim(state)
+nrow(state)
+length(state)
+class(state)
+
+premiums = data$premiums
+
+state_and_premiums = data.frame(cbind(data$state, data$premiums))
+class(state_and_premiums)
+```
+
+```{r}
+summary(data)
+# Could show one version without using na.rm=T
+guam = c("Guam", mean(data$fatal), mean(data$speeding), mean(data$alcohol), mean(data$not_distracted), mean(data$no_prev), mean(data$premium), mean(data$losses), rnorm(1))
+guam
+length(guam)
+dim(data)
+
+# Remove NAs
+guam = c("Guam", mean(data$fatal, na.rm=T), mean(data$speeding, na.rm=T), mean(data$alcohol, na.rm=T), mean(data$not_distracted, na.rm=T), mean(data$no_prev, na.rm=T), mean(data$premium, na.rm=T), mean(data$losses, na.rm=T), rnorm(1))
+guam
+
+new_df = rbind(data, guam)
+new_df[new_df$state == "Guam", ]
+subset(new_df, state == "Guam")
+```
+
+A handy function is colMeans to make this easier.
+
+```{r error=T}
+
+# This doesn't work.
+colMeans(data)
+
+# This doesn't work either!
+colMeans(data, na.rm=T)
+
+# What about this?
+means = colMeans(data[, -1], na.rm=T)
+
+# Update the random number.
+means[8] = rnorm(1)
+
+puerto_rico = c("Puerto Rico", means)
+
+new_df2 = rbind(data, guam, puerto_rico)
+new_df2[50:53, 1:3]
+```
+
+rowMeans is similar, although generally not as useful.
+  
+#- aggregate - come back to if there's time.
+  
+# more ggplot2
+```{r}
+library(ggplot2)
+# Histogram - with one variable default geom = "histogram"
+qplot(premium, data=data)
+
+# Scatter plot - because we have two variables, geom = "scatterplot".
+qplot(premium, losses, data=data)
+qplot(premium, losses, data=data, xlab="premiums", ylab="losses", main="state insurance losses vs premiums")
+
+# Fix the horrible gray default.
+qplot(premium, losses, data=data, xlab="premiums", ylab="losses", main="state insurance losses vs premiums") + theme_bw()
+
+# Change color - I() because it is "aesthetics"
+qplot(premium, losses, color=I("blue"), data=data, xlab="premiums", ylab="losses", main="state insurance losses vs premiums") + theme_bw()
+
+# Color by a third variable
+qplot(premium, losses, color=fatal, data=data, xlab="premiums", ylab="losses", main="state insurance losses vs premiums") + theme_bw()
+
+# Change dot size.
+qplot(premium, losses, color=fatal, data=data, xlab="premiums", ylab="losses", main="state insurance losses vs premiums", size=I(5)) + theme_bw()
+
+# Change dot size by a 4th variable.
+qplot(premium, losses, color=fatal, data=data, xlab="premiums", ylab="losses", main="state insurance losses vs premiums", size=speeding) + theme_bw()
+
+# Redo without using qplot.
+ggp = ggplot(data=data, mapping=aes(x=premium, y=losses, color=fatal, size=speeding))
+
+ggp
+
+# We need to specify the geometry, or plot type.
+ggp + geom_point()
+ggp + geom_point() + theme_bw()
+
+# Density plot
+ggplot(data=data, aes(x=premium)) + geom_density()
+# Compare to histogram
+qplot(data$premium)
+# Change the color
+ggplot(data=data, aes(x=premium)) + geom_density(color="red") + theme_bw()
+
+# Abstract art.
+ggp + geom_path() + theme_bw()
+
+# NOICE - ordered by the x-axis.
+ggp + geom_line() + theme_bw()
+
+# Let's go 80s arcade style.
+ggp + geom_step() + theme_bw()
+
+# Change geometry to the labels themselves.
+# Note that we could have specified the aes(label=state) in the original ggplot.
+textplot <- ggp + labs(x="premiums", y="losses") + 
+  ggtitle("state insurance losses vs premiums") + 
+  geom_text(mapping=aes(label=state), data=data) + theme_bw()
+# Could do: geom_text(mapping=aes(premium, losses, label=state), data=data)
+textplot
+
+# Hide labels that overlap.
+textplot + geom_text(mapping=aes(label=state), data=data, check_overlap=T)
+
+# Labels with a background; no overlap checking though :/
+textplot + geom_label(mapping=aes(label=state), data=data)
+
+# Point and text, with text offset
+# vjust is relative to the point itself. 
+# Nudge moves the point up from its default location.
+ggp + geom_point(size=3) + geom_text(mapping=aes(label=state), data=data, vjust="bottom", nudge_y=1.5, size=3)
+
+# Scale the color of the text.
+textplot + scale_color_gradient(low="blue", high="gold") # different colors
+
+# Change geometry to the labels themselves.
+textplot <- ggp + labs(x="premiums", y="losses") + 
+  ggtitle("state insurance losses vs premiums") + 
+  geom_text(mapping=aes(label=state), data=data) + theme_bw()
+# Could do: geom_text(mapping=aes(premium, losses, label=state), data=data)
+textplot
+
+# Export a plot.
+ggsave(filename="mychart.pdf", plot=ggp, scale=, width=, height=)
+ggsave(filename="mychart.png", plot=ggp, scale=, width=, height=)
+
+```
+
+**Ggplot resources **
+
+# Flow control
+
+**If statements**
+
+```{r}
+if (T) {
+  cat("Help, I'm being executed!\n")
+}
+
+if (F) {
+  cat("Yay, I'm not executed!")
+}
+
+if (8 > 3 & 2 < 5) {
+  cat("Do whatever I want.\n")
+}
+
+# T-statistic example
+set.seed(1)
+t = rnorm(1)
+t
+if (t > 0) {
+  cat("t is a positive pedro.")
+} else if (t < 0) {
+  cat("t is a negative nancy")
+  # Set to be positive.
+  t = t * -1
+} else {
+  cat("t is exactly zero, weird!")  
+}
+```
+
+** For loops **
+
+```{r}
+for (i in 1:10) {
+  cat(i, " ")
+}
+
+# Print is overly verbose.
+for (i in 1:10) {
+  print(i)
+}
+
+# Looping over the rows of a dataframe.
+for (row in 1:nrow(data)) {
+  cat("\nWe are on row:", row, "\n")
+  # Print the first element of each row.
+  print(data[row, 1])
+  observation = data[row, ]
+  # Do something with the observation.
+}
+
+```
+
+**Class**: Can you loop over the columns of a dataframe, and print out how many NAs are in each column?
+  
+# Functions
+```{r error=T}
+blah = function() {
+  answer = 5 + 3
+  cat("The answer is:\n")
+  print(answer)
+}
+blah()
+
+blah = function(x) {
+  answer = x + 3
+  cat("The answer is:\n")
+  print(answer)
+}
+blah()
+blah(5)
+
+blah = function(x = 5) {
+  answer = x + 3
+  cat("The answer is:\n")
+  print(answer)
+}
+blah
+blah()
+blah(10)
+blah(x = 10)
+# What will happen if we do blah(x <- 10)?
+
+```
+
+Let's return some data
+```{r}
+
+another = function(my_var) {
+  answer = sum(my_var^2) - 10  
+  return(answer)
+}
+another(10)
+another(10:11)
+result = another(10:11)
+result
+
+another = function(my_var) {
+  answer = sum(my_var^2) - 10  
+  cat("The answer is\n")
+  print(answer)
+  return(answer)
+}
+another(6)
+# Why did it print out twice?
+result = another(6)
+
+another = function(my_var, print = T) {
+  answer = sum(my_var^2) - 10  
+  if (print) {
+    cat("The answer is\n")
+    print(answer)
+  }
+  return(answer)
+}
+another(5)
+another(6, print=F)
+another(6, F)
+result = another(6, F)
+
+last_one = function() {
+  t_stat = 5.5
+  p_value = 0.001
+  result = c(t_stat, p_value)
+  return(result)
+}
+
+last_one()
+answer = last_one()
+answer
+answer[1]
+answer[2]
+
+last_one_better = function() {
+  t_stat = 5.5
+  p_value = 0.001
+  result = c(t=t_stat, p=p_value)
+  return(result)
+}
+answer = last_one_better()
+answer
+answer[1]
+answer["t"]
+answer["p"]
+
+```
+
+# more working with vectors
+
+```{r}
+# Let's go back to the transportation data.
+summary(data)
+
+# Ifelse
+above_average = ifelse(data$fatal >= mean(data$fatal, na.rm=T), 1, 0)
+table(above_average)
+
+# %in%
+data$state %in% c("California", "District of Columbia", "Texas")
+sum(data$state %in% c("California", "District of Columbia", "Texas", "nuthin"))
+
+# Ifelse with %in%
+good_states = ifelse(data$state %in% c("California", "District of Columbia", "Texas"), 1, 0)
+table(good_states)
+
+# Exclude certain columns by name
+ncol(data)
+
+names(data)
+# Same thing
+colnames(data)
+
+names(data) %in% c("no_prev", "premium", "rand")
+!names(data) %in% c("no_prev", "premium", "rand")
+subset = data[, !names(data) %in% c("no_prev", "premium", "rand")]
+names(subset)
+
+```
+
+**Paste and paste0**
+
+These are used for output primarily, combining vectors into printable strings.
+
+```{r}
+vec = c(10, 5, 9, 6, 13)
+paste(vec, "is a number")
+# Convert to a single string, with each element separated by a comma.
+paste(vec, collapse=", ")
+cat("My output is:", vec)
+cat("My output is:", paste(vec, collapse=", "))
+
+cat(paste(vec))
+cat(paste0(vec))
+```
+
+# Other topics if we have time:  
+* apply and tapply (skip possibly)
+* sample
+* merging files
+* regression
+  - OLS
+  - logistic
+  - predict()
+  - interaction terms
+* few last things
+  - system.time()
+  - gc()
