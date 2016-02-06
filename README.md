@@ -15,11 +15,11 @@ Prepared for Public Policy 290 "Analytics for Government Policy" by Avi Feller, 
 * Sequences: colon operator `:` and `seq()`
 * Vectors, vector functions `length()`, `sum()`, `mean()`, `max()`, `min()`, `summary()`
 * Random numbers: `set.seed()` and `runif()`
-* Getting help: `?` and `help()`
-* Function arguments
+* Getting help: `?`, `help()`, `help(package=)`
+* Calling functions
 * Creating vectors: `c()`, `rep()`
 * Subsetting vectors with bracket notation `[]`
-* Data frames: `data.frame()`, `nrow()`, `ncol()`, `dim()`, `names()`
+* Data frames: `data.frame()`, `nrow()`, `ncol()`, `dim()`, `names()`, `str()`
 * Subsetting data frames: bracket notation `[]`, `$`, `subset()`
 * Factors: `levels()`, `as.character()`
 * Object types: `class()`, `str()`
@@ -33,10 +33,10 @@ Prepared for Public Policy 290 "Analytics for Government Policy" by Avi Feller, 
 
 * Missing values: `is.na()`, `na.rm` option
 * More data frames: `cbind()`, `rbind()`, `colMeans()`, `rowMeans()`
-* More ggplot2: custom labeling, themes, colors, sizes; `ggplot()`, `geom_point()`, `geom_density()`, `geom_path()`, `geom_line()`, `ggtitle()`, `geom_text()`, `geom_label()`, `labs()`, `ggsave()`
+* More `ggplot2`: custom labeling, themes, colors, sizes; `ggplot()`, `geom_point()`, `geom_density()`, `geom_path()`, `geom_line()`, `ggtitle()`, `geom_text()`, `geom_label()`, `labs()`, `ggsave()`
 * Flow control: `for` loops, `if else` blocks
 * More vectors: `ifelse()`, `%in%`
 * Cleaner text output with `cat()`
-* Functions: basic functions, function arguments, returning results, argument defaults
+* Creating functions: basic functions, function arguments, returning results, argument defaults
 
 Future content: day 3 would focus on data analysis using regression, apply and replicate, and merging files.
