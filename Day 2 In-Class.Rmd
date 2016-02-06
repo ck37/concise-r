@@ -1,0 +1,325 @@
+---
+title: "R Workshop Day 2"
+author: "Chris Kennedy"
+date: "February 5, 2016"
+output: html_document
+---
+Function - collection of commands that may return something, and may accept argument.
+
+Data structures:
+vector,
+element,
+character string,
+object/variable
+```{r}
+1
+c(1, 2, 3)
+"my name"
+c("str1", "str2")
+c("str1", "str2", 5)
+
+my_variable = 10
+
+#install.packages("readr")
+library(readr)
+
+data = read_csv("http://is.gd/gspp_2016")
+```
+* How many rows and columns in the dataset?
+- ncol, nrow, dim
+
+* What is the variable type for each column?
+- str(), 
+
+```{r}
+str(data)
+structure(data)
+names(data)
+data[, "State"]
+data[, 2]
+data[, c(2, 5, 7)]
+names(data)
+
+new_names = c("state", "fatal", "speeding","not_distracted", "no_prev", "premium", "losses")
+length(new_names)
+length(names(data))
+ncol(data)
+
+names(data) <- c("state", "fatal", "speeding","alcohol", "not_distracted", "no_prev", "premium", "losses")
+names(data)
+```
+* What do the distributions look like?
+
+```{r}
+summary(data)
+```
+* Can you plot histograms for the continuous variables?
+```{r}
+library(ggplot2)
+qplot(data$fatal)
+qplot(data[, 2])
+qplot(data[, "fatal"])
+which_column = "fatal"
+data[, which_column]
+qplot(data[, which_column])
+# This doesn't work:
+data$which_column
+# This does:
+data$fatal
+
+```
+* How many observations per state are there?
+```{r}
+table(data$state)
+```
+
+Missing values
+
+TODO: lookup code for prettier tables.
+
+```{r}
+is.na
+?is.na
+
+is.na(5)
+is.na(NA)
+
+is.na("STRING")
+is.na(c(1, 2, NA))
+my_vec = c(1, 2, NA)
+is.na(my_vec[1])
+is.na(my_vec[2])
+is.na(my_vec[3])
+is.na(my_vec)
+
+names(data)
+is.na(data$speeding)
+
+data$speding
+is.na(NULL)
+is.na(data$speding)
+
+sum(is.na(data$speeding))
+
+my_names = names(data)
+my_names
+
+length(my_names)
+ncol(data)
+1:length(my_names)
+
+# Long way
+for (current_column_number in 1:length(my_names)) {
+  print(current_column_number)
+}
+
+# Short way
+for (col_num in 1:ncol(data) ) {
+  print(col_num)
+  4 + 5
+  blah = rnorm(10)
+  answer = mean(blah) 
+  print(answer)
+}
+
+for (x in 1:8) { print(x) }
+
+5
+qplot(data[, 2])
+print(qplot(data[, 2]))
+
+for (col_num in 1:ncol(data) ) {
+  col_num
+  print(col_num)
+  #print(qplot(data[, col_num]))
+  #print(qplot(data[, col_num]))
+}
+
+col_num
+names(data)
+for (col_num in 1:ncol(data) ) {
+  print(col_num)
+  #names_vector = names(data)
+  #print(names_vector[1])
+  #print(names_vector[col_num])
+  variable_name <- names(data)[col_num]
+  print(qplot(data[, col_num], xlab = variable_name))
+  # Same thing:
+  print(qplot(data[, col_num], xlab = names(data)[col_num]))
+}
+
+# Try to do a for loop to count the number of NAs in each column
+for (col_num in 1:ncol(data)) {
+  cat("Variable name: ")
+  cat(names(data)[col_num])
+  cat("\n")
+  cat("Sum of missing values: \n")
+  print(sum(is.na(data[, col_num])))
+
+  cat("Sum of missing values:", sum(is.na(data[, col_num])), "\n") 
+   
+  cat("Table of missing values: \n")
+  print(table(is.na(data[, col_num])))
+}
+
+data[c(3, 7, 17, 37), -1]
+
+data[c(3, 7, 17, 37), -1] <- NA
+
+# Don't have to do this:
+data[c(3, 7, 17, 37), -1] <- c(NA, NA, NA, NA, ...)
+
+data[, -c(1, 2, 3)]
+
+# Run for loop again and count NAs in each column
+
+# Single column:
+sum(is.na(data[, 2]))
+
+mean(data$fatal)
+
+mean(data$fatal, na.rm = TRUE)
+
+mean(data$fatal[!is.na(data$fatal)] )
+
+!is.na(data$fatal)
+
+data$fatal[!is.na(data$fatal)]
+
+```
+
+```{r}
+set.seed(1)
+rand <- rnorm(nrow(data))
+length(rand)
+rand
+mean(rand)
+
+set.seed(2)
+rand <- rnorm(nrow(data))
+mean(rand)
+rand
+
+set.seed(10)
+rand <- rnorm(nrow(data))
+mean(rand)
+
+cbind
+
+# Adding a column to a dataframe, create a new dataframe.
+data2 <- cbind(data, rand)
+names(data2)
+data2$rand
+
+# Overwrite the existing dataframe
+data <- cbind(data, rand)
+names(data)
+
+names(data2)
+
+# Dropping a column
+data2 = data2[, -9]
+names(data2)
+
+# another way - delete this column.
+data2$rand = NULL
+names(data2)
+
+id = 1:100
+rand = rnorm(100)
+my_dataframe = data.frame(cbind(id, rand))
+class(my_dataframe)
+dim(my_dataframe)
+
+names(data2)
+guam = c("Guam", mean(data$fatal), mean(data$speeding), mean(data$alcohol), 1, 1, 1, 1)
+length(guam)
+guam
+
+data3 = rbind(data, guam)
+nrow(data3)
+data3[52, ]
+
+data3 = data3[-52, ]
+nrow(data3)
+
+data3 = data3[1:51, ]
+
+View(data3[, -1])
+
+means <- colMeans(data[, -1])
+means
+length(means)
+
+puerto_rico = c("Puerto Rico", means)
+puerto_rico
+
+another_df = rbind(data, puerto_rico)
+View(another_df)
+another_df[another_df$state == "Puerto Rico", ]
+names(another_df)
+summary(another_df$fatal)
+class(another_df$fatal)
+another_df$fatal < 10
+another_df[another_df$fatal < 10, ]
+
+puerto_rico = c(NA, means)
+puerto_rico
+
+another_df = rbind(data, puerto_rico)
+another_df[52, ]
+another_df$state[52] = "Puerto Rico"
+another_df[52, ]
+class(another_df$fatal)
+
+another_df[another_df$fatal < 10, ]
+
+```
+
+```{r}
+library(ggplot2)
+
+qplot(data$premium)
+# Can't do this:
+qplot(premium)
+# second data is referring to the dataframe.
+# first data
+qplot(premium, data = data)
+
+qplot(premium, losses, data = data)
+
+cor(data$premium, data$losses)
+
+# Remove obs with NA in premium or losses.
+data_no_nas = data[!is.na(data$premium) & !is.na(data$losses), ]
+cor(data_no_nas$premium, data_no_nas$losses)
+
+qplot(premium, losses, data = data, xlab="Premiums", ylab="Losses in $MM", main="State insurrance losses vs. premiums")
+
+qplot(premium, losses, data = data, xlab="Premiums", ylab="Losses in $MM", main="State insurrance losses vs. premiums") + theme_bw()
+
+qplot(premium, losses, data = data, xlab="Premiums", ylab="Losses in $MM", main="State insurrance losses vs. premiums", color=I("red")) + theme_bw()
+
+qplot(premium, losses, data = data, xlab="Premiums", ylab="Losses in $MM", main="State insurrance losses vs. premiums", color=fatal) + theme_bw()
+
+qplot(premium, losses, data = data, xlab="Premiums", ylab="Losses in $MM", main="State insurrance losses vs. premiums", color=fatal, size=I(5)) + theme_bw()
+
+qplot(premium, losses, data = data, xlab="Premiums", ylab="Losses in $MM", main="State insurrance losses vs. premiums", color=fatal, size=speeding) + theme_bw()
+
+ggp <- ggplot(data=data, mapping=aes(x=premium, y=losses, color=fatal, size=speeding)) + theme_bw()
+ggp
+
+ggp + geom_point()
+my_plot = ggp + geom_point()
+my_plot
+
+qplot(data$premium)
+
+ggplot(data=data, mapping=aes(x=premium)) + geom_histogram(aes(y=..density..)) + geom_density(color="red")
+
+ggp + geom_path()
+ggp + geom_line() + ggtitle("New title")
+
+```
+
+[Ran out of time for the remainder, but it's on github!]

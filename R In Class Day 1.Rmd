@@ -1,0 +1,364 @@
+---
+title: "R In Class Day 1"
+author: "Chris Kennedy"
+date: "January 29, 2016"
+output: html_document
+---
+
+This is the start of our day.
+
+```{r}
+2 + 3
+4 * pi
+
+################
+# We're using R as a calculator.
+
+3^7 # 3 to the power of 7.
+sqrt(6)
+log(10) # e^x = 10
+exp(2.3)
+```
+
+This comes **after** or *italics*.
+
+```{r}
+my_var <- TRUE
+my_var
+print(my_var)
+
+another.var = "periods can be in variable names"
+another.var
+
+x = 7
+y <- 19
+
+ls
+ls()
+
+vec <- 1:100
+vec
+
+length(vec)
+
+sum(vec)
+
+mean(vec)
+max(vec)
+min(vec)
+
+summary(vec)
+
+prop.table(table(my_dataframe$var1))
+
+var(vec)
+
+set.seed(8675309)
+rand <- runif(10)
+rand
+
+# What are the mean, standard dev, sum, max of the random uniform?
+
+seq(1, 200, 2)
+
+seq(2, 1, 200)
+
+?seq
+
+rm(my_var)
+ls()
+
+rm(didnt_make_this_one)
+
+help(seq)
+
+seq(to = 200, from = 1, by = 2)
+
+seq(from = 1, to = 200, by = 2)
+
+seq(to <- 200, from <- 1, by <- 2)
+
+rm(by, from, to)
+
+ls()
+rm(list = ls())
+
+rm(didntmakethisvariable)
+
+```
+
+```{r}
+1:10
+x = c(1, 2, 3)
+x
+y = c(8, 6, 7, 5, 3, 0, 9)
+y
+
+z = c(x, y)
+z
+
+c("monday", "tuesday", "wednesday")
+c("monday", "tuesday", "wednesday", 3.6, 7)
+
+c(1:5, "four")
+
+c(TRUE, FALSE, TRUE, TRUE)
+c(T, F, T, T)
+
+c(T, F, T, T, 0, 1)
+
+sum(c(T, F, F, F, T))
+
+mean(c(T, F, F, F, T))
+
+c(10:4, 3:1)
+
+rep(5, 3)
+
+rep("gspp", 10)
+
+x = c(1, 2, 3)
+rep(x, 3)
+
+rep(x, each=3)
+
+rep(x, times=c(1, 2))
+
+empty_vec = rep(NA, 10)
+empty_vec
+length(empty_vec)
+
+x = c(10)
+x
+x = c(x, 15, 17)
+x
+
+empty_vec[1]
+
+empty_vec[1] <- 5
+empty_vec
+
+empty_vec[2] = 6
+empty_vec
+
+empty_vec[ c(1, 2) ]
+
+empty_vec[ 1:2 ]
+empty_vec[seq(1, 2) ]
+
+empty_vec[c(5, 7, 9)] <- c(20, 30, 40)
+empty_vec
+
+empty_vec[c(T, F, T, F, T, F, F)]
+
+empty_vec[c(F, F, F, F, F, F, F, F, F, F)]
+
+empty_vec[-5]
+
+empty_vec[-c(5, 7)]
+
+empty_vec[c(-5, -7)]
+
+set.seed(8675309)
+some_nums <- runif(5, 1, 10)
+some_nums
+
+some_nums > 5
+
+sum(some_nums > 5)
+
+numbers_greater_than_five = some_nums > 5
+numbers_greater_than_five
+
+some_nums[numbers_greater_than_five]
+
+some_nums[some_nums > 5]
+
+which(some_nums > 5)
+
+some_nums[which(some_nums > 5)]
+
+some_nums[some_nums > 5]
+
+some_nums[c(2, 3, 4)]
+
+some_nums[some_nums < 4 | some_nums > 5]
+
+some_nums[(some_nums > 4) & (some_nums < 6)]
+```
+
+```{r}
+var1 = 10:1
+var1
+var2 = rep(c("A", "B"), 5)
+var2
+set.seed(8675309)
+var3 = rnorm(10)
+
+my_dataframe <- data.frame(var1, var2, var3)
+my_dataframe
+
+nrow(my_dataframe)
+
+ncol(my_dataframe)
+length(my_dataframe)
+
+dim(my_dataframe)
+
+names(my_dataframe)
+
+summary(my_dataframe)
+
+str(my_dataframe)
+
+my_dataframe2 = data.frame(new_name1 = var1, new_name2 = var2, new_name3 = var3)
+my_dataframe2
+
+names(my_dataframe2)
+
+names(my_dataframe2) <- c("x1", "x2", "x3")
+my_dataframe2
+
+my_names = c("x1", "x2", "x3")
+names(my_dataframe2) = my_names
+names(my_dataframe2)
+```
+
+```{r}
+my_dataframe$var1
+var1
+
+my_dataframe$var2
+var2
+
+my_vec3 = my_dataframe$var3
+my_vec3
+my_vec3[c(3, 4)]
+
+my_dataframe$var3[c(3, 4)]
+
+attach(my_dataframe)
+
+my_dataframe[ , ]
+
+my_dataframe[1, ]
+
+my_dataframe[c(1, 5, 7), ]
+
+my_dataframe[1, "var1"]
+
+my_dataframe$var1[1]
+
+my_dataframe[1, c("var1", "var3")]
+
+my_dataframe[ , c("var1", "var3")]
+
+my_dataframe[, c(1, 3)]
+
+my_dataframe[, 1:3]
+
+my_dataframe[, -c(1, 3)]
+
+my_dataframe$var1 > 5
+
+my_dataframe[my_dataframe$var1 > 5, ]
+
+subset(my_dataframe, var1 > 5 & var3 >= 1.5)
+
+attach(my_dataframe)
+
+data_analysis <- my_dataframe[var1 > 5, ]
+data_analysis
+
+detach(my_dataframe)
+
+rm(var1)
+
+data_analysis <- my_dataframe[var1 > 5, ]
+
+my_dataframe$var2
+
+levels(my_dataframe$var2)
+
+as.character(my_dataframe$var2)
+
+my_dataframe$new_var2 = as.character(my_dataframe$var2)
+names(my_dataframe)
+
+str(my_dataframe)
+summary(my_dataframe)
+
+class(my_dataframe$var2)
+class(my_dataframe$var1)
+class(my_dataframe$var3)
+class(my_dataframe$new_var2)
+
+class(my_dataframe)
+
+table(my_dataframe$var1)
+results = table(my_dataframe$var1)
+prop.table(results)
+
+prop.table(table(my_dataframe$var1))
+prop.table(table(my_dataframe$var2))
+prop.table(table(my_dataframe$var3))
+
+my_dataframe$var1[2] = 1
+table(my_dataframe$var1)
+prop.table(table(my_dataframe$var1))
+
+table(my_dataframe$var1, my_dataframe$var2)
+prop.table(table(my_dataframe$var1, my_dataframe$var2))
+
+table("Rows" = my_dataframe$var1, "Columns" = my_dataframe$var2)
+
+install.packages("ggplot2")
+install.packages(ggplot2)
+library(ggplot2)
+library("ggplot2")
+
+qplot(my_dataframe$var3)
+
+```
+
+```{r}
+install.packages("haven")
+library(haven)
+
+?haven
+??haven
+help(package=haven)
+
+data = read_dta("http://www.ats.ucla.edu/stat/stata/examples/chp/p150.dta")
+nrow(data)
+ncol(data)
+dim(data)
+
+names(data)
+
+data[3, ]
+data[1:3, ]
+
+summary(data)
+
+sum(data$year) / length(data$year)
+
+str(data)
+
+data = read_dta("my_file.dta")
+getwd()
+
+data = read_dta("/Users/yourname/Downloads/my_file.dta")
+
+install.packages("readr")
+library(readr)
+
+data <- read_tsv("http://www.ats.ucla.edu/stat/examples/chp/p189.txt")
+dim(data)
+names(data)
+summary(data)
+read_csv()
+
+```
+
+

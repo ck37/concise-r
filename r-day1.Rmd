@@ -3,7 +3,6 @@ title: "GSPP R Tutorial Day 1"
 author: "Chris Kennedy"
 date: "January 29, 2016"
 output: html_document
-results: hold
 ---
 
 Goals
@@ -604,9 +603,7 @@ library(haven)
 library("haven")  # Either way is fine.
 ```
 
-**Class Question**: How can we figure out what functions haven provides?
-
-To get help on a package, we can't use `?` or `help` in exactly the same way.
+To get help on a package, we can't use `?` or `help` in exactly the same way as in a function.
 
 ```{r}
 ?haven
@@ -663,7 +660,5 @@ data = read_tsv("http://www.ats.ucla.edu/stat/examples/chp/p189.txt")
 ```
 
 # Questions / Review / Additional Dataset Exercises
-
-[May want to distribute the extra datafiles and do some exercises]
 
 That's all for today, well done!
