@@ -1,4 +1,5 @@
-# r-intro
+# A Concise Introduction to R
+
 For Public Policy 290 "Analytics for Government Policy" by Avi Feller, Spring 2016.
 
 The goal of this material is to provide a concise introduction to R with sufficient training on fundamentals that students can understand R syntax, resolve common R errors, and complete basic data analysis. No prior knowledge of R is assumed, and each day is intended to take about 3 hours. After completion students should be familiar with R and able to teach themselves more advanced techniques using online resources.
