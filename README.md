@@ -1,7 +1,7 @@
 # r-intro
 For Avi Feller's GSPP class, Jan 2016
 
-# Day 1
+## Day 1
 
 Topics covered:
 
@@ -23,6 +23,6 @@ Topics covered:
 * Visualization: `qplot()` from `ggplot2`.
 * Importing data: `getwd()`, haven `read_dta()`, and readr `read_csv()`, `read_tsv()`
 
-# Day 2
+## Day 2
 
 Topics covered: [to be added]
