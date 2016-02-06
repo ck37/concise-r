@@ -1,12 +1,12 @@
 # A Concise Introduction to R
 
-For Public Policy 290 "Analytics for Government Policy" by Avi Feller, Spring 2016.
-
 The goal of this material is to provide a concise introduction to R & RStudio with sufficient training on fundamentals that students can understand R syntax, resolve common R errors, and complete basic data analysis. No prior knowledge of R is assumed, nor other programming experience. Each session is intended to take about 3 hours. After completion students should be familiar with R and able to teach themselves more advanced techniques using online resources.
+
+Prepared for Public Policy 290 "Analytics for Government Policy" by Avi Feller, Spring 2016.
 
 ## Day 1
 
-Topics covered:
+[R Markdown file](https://github.com/ck37/r-intro-2016/blob/master/r-day1.Rmd). Topics covered:
 
 * Overview of RStudio and RMarkdown
 * Math functions
@@ -29,4 +29,14 @@ Topics covered:
 
 ## Day 2
 
-Topics covered: [to be added]
+[R Markdown file](https://github.com/ck37/r-intro-2016/blob/master/r-day2.Rmd). Topics covered:
+
+* Missing values: `is.na()`, `na.rm` option
+* More data frames: `cbind()`, `rbind()`, `colMeans()`, `rowMeans()`
+* More ggplot2: custom labeling, themes, colors, sizes; `ggplot()`, `geom_point()`, `geom_density()`, `geom_path()`, `geom_line()`, `ggtitle()`, `geom_text()`, `geom_label()`, `labs()`, `ggsave()`
+* Flow control: `for` loops, `if else` blocks
+* More vectors: `ifelse()`, `%in%`
+* Cleaner text output with `cat()`
+* Functions: basic functions, function arguments, returning results, argument defaults
+
+Future content: day 3 would focus on data analysis using regression, apply and replicate, and merging files.
