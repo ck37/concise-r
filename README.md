@@ -8,6 +8,7 @@ The goal of this material is to provide a concise introduction to R & RStudio wi
 
 Topics covered:
 
+* Overview of RStudio and RMarkdown
 * Math functions
 * Assignment operator `<-` and `=`
 * Environmental variables: `ls()` and `rm()`
