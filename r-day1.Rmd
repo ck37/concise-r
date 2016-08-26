@@ -16,6 +16,47 @@ Acknowledgements: inspired by materials by Chris Paciorek, Rochelle Terman, Alex
 
 **Pop quiz!**
 
+# RStudio Projects
+
+First let's make a project for today:
+
+* Create a new project: File -> New Project
+* Choose new directory or existing directory as preferred.
+* Click "open in new session" to have multiple RStudio projects open.
+
+A project's folder is automatically set as the working directory, which allows us to not worry about explicitly setting the working directory. This can be more convenient when working on the same code across different computers. I recommend always using a project to make your code not rely on being in a certain folder.
+
+We can see recent projects by selecting File -> Recent Projects in the upper left corner of RStudio, or by clicking the list of recent projects in the upper right corner. If we click the name of the project it will switch to that project, or if we click the button it will open in a new session.
+
+Easy Challenge: close your project and then re-open it.
+
+# RStudio interface
+
+When we start RStudio we have no files open by default. Click File -> New File -> RScript to start a new R script (or program). Sometimes it's preferable to instead click File -> New File -> R Markdown to start a new R Markdown file. R Markdown files combine R scripts with simple text formatting, which makes reports  (PDFs or HTMLs) easy to generate with embedded R output. Try making a new R script and R markdown right now, and save the files. 
+
+Items to note:
+* Files show up as tabs in the editor window, usually the upper left.
+* The console is the R session where our commands are executed.
+* Environment tab in the upper right, and history tab.
+* Files tab in bottom right, plus plots, help, etc.
+* We can click the "run" button to run the current R line in the editor.
+* Code menu has a lot of commands and shortcuts.
+
+# Basic R markdown file.
+
+For this class let's use an R Markdown file because you can turn in homeworks that way. Let's delete all of the default text other than those config options at the top. If we type in text that will be displayed automatically.
+
+To write R code we need to start an R block with three backticks followed by r in braces (squiggly brackets - { and }). We can write commands inside of those brackets to change settings.
+
+Task: everyone google "RMarkdown cheat sheet" and save that PDF.
+
+Challenge:
+
+* Create a header line called "R Training Day 1", with size 1 (aka "header 1").
+* Make a list (ordered or unordered) with the classes you're taking this semester.
+* Write the equation: Area = Pi * r^2
+* Compile as a PDF (or html if you prefer).
+
 # R as a calculator 
 
 Reviewing some of the material from R Notes, we can use R to calculate. R will print out the results automatically.
@@ -67,6 +108,12 @@ Notice in the `Environment` tab of RStudio that we can see those newly created v
 
 ```{r}
 ls()
+```
+
+We can remove objects with `rm()`
+
+```
+rm(my_var)
 ```
 
 We can use = or <- to assign a value. <- is more traditional in R, but = is used in other languages like Stata or Python. There are other minor differences that we won't get into now.
