@@ -1,5 +1,5 @@
 ---
-  title: "Day 2 In-Class code"
+title: "Day 2 In-Class code"
 author: "Chris Kennedy"
 date: "August 31, 2016"
 output: html_document
