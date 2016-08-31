@@ -8,10 +8,11 @@ output: html_document
   Test.
 
 ```{r error=T}
-# See more configuration in google: "r markdown cheat sheet"
-c(1, 2, 3)
+# ^ We set error=T to allow the markdown file to compile even if there's an error.
+# See more Markdown configuration in google: "r markdown cheat sheet"
 
-# Clear our any existing objects.
+
+# Clear out any existing objects.
 rm(list = ls())
 
 set.seed(1)
