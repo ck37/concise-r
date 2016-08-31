@@ -1,0 +1,331 @@
+---
+title: "R Training Day 1"
+author: "Chris Kennedy"
+date: "August 26, 2016"
+output: html_document
+---
+
+This is a sentence.
+
+```{r error=T}
+#############################
+# Trying out some addition. #
+#############################
+
+2 + 2
+3 * 4
+4 * pi
+3^7
+log(10)
+exp(2.3)
+exp(1)
+
+1:10
+1:50
+
+# Assigning values to an R variable.
+
+my_var <- 5
+my_var
+print(my_var) # Also print this way.
+cat(my_var)
+cat(my_var, "is the value of my_var.") 
+?cat
+?print
+cat("A\n")
+cat("B")
+cat("Line 1\nLine 2")
+# print(my_var, "is the value of my_var.")
+
+
+my.name = "Chris"
+my.name
+
+my.name2 <- "Chris 2"
+my.name2
+
+# This doesn't work because we need quotation marks.
+#my_name3 <- Chris 3
+
+rm(my.name2)
+
+ls()
+
+rm(list = ls())
+
+# Remake these two variables.
+my.name = "Chris"
+my.name2 <- "Chris 2"
+
+rm(list = c("my.name", "my.name2"))
+rm(list = ls())
+
+my_var <- 5
+my.var <- 6
+cat("my_var is", my_var, "but my.var is", my.var)
+
+# These variables don't exist:
+#have_not_made_this
+#another_bad_one * 10
+
+vec <- 1:100
+# We don't need this c() here:
+vec2 <- c(1:100)
+# Display the vector:
+print(vec)
+vec
+
+cat(vec, "another test")
+
+length(vec)
+
+diff_interval <- seq(1, 5)
+diff_interval
+diff_interval2 <- seq(1, 5, 0.5)
+diff_interval2
+
+# Don't have to save a variable:
+seq(1, 5, 0.5)
+seq(from=1, to=5, by=0.5)
+seq(1, 5, by=0.1)
+
+seq(by = 2, to=10, from=4)
+
+seq(1, 10, length.out = 100)
+
+?length
+
+# More vector math:
+sum(vec)
+mean(vec)
+# Also calculate the mean:
+sum(vec) / length(vec)
+max(vec)
+min(vec)
+var(vec)
+sd(vec)
+# Same as sd():
+sqrt(var(vec))
+
+summary(vec)
+
+# Save typing, be weirder:
+su = summary  # Copy function to a new name.
+# Same thing:
+su <- summary # Copy function to a new name.
+# Use our new name:
+su(vec)
+summary(vec)
+
+# View code of functions:
+summary
+max
+lm
+
+# Rename regression:
+another_lm <- lm
+
+# Generate 10 random uniforms on [0, 1] interval.
+random_uniform <- runif(10)
+random_uniform
+summary(random_uniform)
+
+# Change interval to [1, 6]:
+runif(10, 1, 6)
+
+set.seed(1)
+set.seed(20160826)
+
+# We always want to set our seed before generating
+# random numbers so that our simulations are replicable.
+set.seed(249)
+mean(runif(6, 10, 20))
+# Whole numbers from 1 to 9.
+whole_nums <- floor(runif(1000, 1, 10))
+table(whole_nums)
+
+# From 1 to 10.
+whole_nums <- floor(runif(1000, 1, 11))
+table(whole_nums)
+
+# Generate 15 samples from random normal distribution.
+# ~ N(0, 1) - mean = 0 and sd = 1.
+rand_norms <- rnorm(15)
+summary(rand_norms)
+hist(rand_norms)
+
+# Try more samples:
+hist(rnorm(1000))
+
+# Install a package:
+#install.packages("markdown")
+# Load it:
+library(markdown)
+
+# Try this:
+#install.packages("devtools")
+#devtools::install_github("rstudio/rmarkdown")
+
+# Run and show any output.
+source("setup.R")
+# Same thing, we can be explicit about not echoing 
+source("setup.R", echo=F)
+
+# Show the code as it's being run.
+source("setup.R", echo=TRUE)
+
+# Let's do more vectors.
+1:3
+c(1, 2, 3)
+other_nums <- c(1983, 1945, 2008, 2016)
+other_nums
+
+some_strings <- c("monday", "tuesday", "wednesday", "thu", "fri")
+some_strings
+
+# had_a_typo <- c("monday", "tue", "wed, "thu", "fri")
+different_typo <- c("monday", "tue", "wde", "thu", "fri")
+different_typo
+
+different_typo[1]
+different_typo[2]
+different_typo[3]
+different_typo[6]
+different_typo[7]
+
+different_typo[3] <- "wed"
+different_typo
+
+which(different_typo == "wed")
+
+different_typo[5] <- "wed"
+
+wed_elements <- which(different_typo == "wed")
+different_typo[wed_elements]
+different_typo[c(3, 5)]
+# Can't do this:
+different_typo[3, 5]
+
+?vector
+
+c(T, F, T, T)
+c(TRUE, FALSE, TRUE, TRUE)
+
+different_typo
+
+different_typo[c(T, F, F, T, T)]
+
+vec <- 1:100
+
+# Modulus example:
+100 %% 5
+
+# Select every 5th element from the list.
+vec[1:length(vec) %% 5 == 0]
+
+# Positions in our vector.
+1:length(vec)
+
+# Positions in our vector, remainder after dividing by 5.
+1:length(vec) %% 5
+
+1:length(vec) %% 5 == 0
+
+# Give us the positions in the vector.
+which(1:length(vec) %% 5 == 0)
+
+# Check every position and list their values.
+vec[1:length(vec) %% 5 == 1]
+
+vec5 = vec * 5
+# Output the values
+vec5[1:length(vec5) %% 5 == 1]
+# Output the positions in the vector
+which(1:length(vec5) %% 5 == 1)
+
+# Next week: ?factor
+
+# Just the first element.
+vec[1]
+# Select everything except the first element:
+vec[-1]
+# Exclude multiple positions:
+vec[-c(10, 20, 30, 50)]
+length(vec[-c(10, 20, 30, 50)])
+
+vec2 <- vec
+vec2[c(10, 20, 30, 50)] <- NA
+vec2
+
+# Doesn't show NAs by default.
+table(vec2)
+# Show the NAs:
+table(vec2, useNA = "ifany")
+table(vec, useNA = "always")
+table(vec, useNA = "ifany")
+
+# Returns NA due to missing data:
+mean(vec2)
+
+# Ignore missing data, calculate mean on remaining elements.
+mean(vec2, na.rm = T)
+
+# Other special codes: Inf, NaN (not a number)
+1/0
+0/0
+log(-1)
+
+nums_above_50 <- vec > 50
+table(nums_above_50)
+nums_above_50
+vec[nums_above_50]
+vec[vec > 50]
+vec[which(vec > 50)]
+
+vec[50:100]
+vec[seq(5, 100, by=5)]
+
+vec[vec < 10 | vec > 90]
+vec < 10 | vec > 90
+
+vec[vec > 45 & vec < 55]
+vec[vec == 55]
+vec[vec == 500]
+length(vec[vec == 500])
+# Includes NAs:
+vec2[vec2 > 45 & vec2 < 55]
+# Let's remove NAs
+vec2[vec2 > 45 & vec2 < 55 & !is.na(vec2)]
+# Same thing:
+vec2[vec2 > 45 & vec2 < 55 & is.na(vec2) == F]
+?is.na
+is.na(vec2)
+which(is.na(vec2))
+
+?data.frame
+my_df <- data.frame(1:10, 21:30, 41:50)
+my_df
+colnames(my_df) <- c("a", "b", "c")
+my_df
+names(my_df) <- c("a", "b", "c")
+colnames(my_df)
+rownames(my_df)
+
+my_df2 <- data.frame(a=1:10, b=21:30, c=41:50)
+my_df2
+
+nrow(my_df2)
+ncol(my_df2)
+dim(my_df2)
+
+View(my_df2)
+my_df2$a
+
+my_df2$day <- c("mon", "tue", "wed", "thu", rep(NA, 6))
+my_df2
+rep(5, 10)
+rep(c(1, 2), 10)
+mean(my_df2$a)
+my_df2[]
+
+```
