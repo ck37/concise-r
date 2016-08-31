@@ -1,0 +1,321 @@
+---
+  title: "Day 2 In-Class code"
+author: "Chris Kennedy"
+date: "August 31, 2016"
+output: html_document
+---
+  
+  Test.
+
+```{r error=T}
+# See more configuration in google: "r markdown cheat sheet"
+c(1, 2, 3)
+
+# Clear our any existing objects.
+rm(list = ls())
+
+set.seed(1)
+var1 = 10:1
+var2 = rep(c("A", "B"), 5)
+var2
+var3 = rnorm(10)
+var3
+
+my_df <- data.frame(var1, var2, var3)
+ls()
+summary(my_df)
+str(my_df)
+
+blah <- function() { print("hello") }
+blah
+
+?data.frame
+my_df2 <- data.frame(var1, var2, var3,
+                     stringsAsFactors = F)
+str(my_df2)
+
+dim(my_df2)
+nrow(my_df2)
+ncol(my_df2)
+names(my_df2)
+colnames(my_df2)
+rownames(my_df2)
+
+names(my_df2) <- c("var_seq", "ab", "rnorm")
+names(my_df2)
+
+# Using strange characters:
+names(my_df2) <- c("var seq", "ab%%", "rnorm$")
+names(my_df2)
+
+my_df2$var seq
+my_df2$`var seq`
+my_df2$`ab%%`
+my_df2$`rnorm$`
+
+# Full dataframe:
+my_df2[]
+# 5th observation, all columns (aka variables)
+my_df2[5, ]
+names(my_df)
+# Print out the subset of the dataframe:
+my_df[5, c("var1", "var2") ]
+# Save it:
+result <- my_df[5, c("var1", "var2") ]
+result
+
+rep(TRUE, 10)
+result <- my_df[rep(TRUE, 10), 3]
+result
+
+my_df[my_df$var3 > 0, ]
+my_df$var3 > 0
+
+save(my_df, my_df2, result, file = "example.RData")
+save(my_df, my_df2, result, file = "data/example.RData")
+getwd()
+rm(list=ls())
+load("example.RData")
+# Use <escape> to get out of a missing quote/parenthesis/etc.
+# print("print something
+
+rm(list=ls())
+result = 5
+my_df = "blah"
+load("example.RData")
+ls()
+
+# Combine $ and bracket notation:
+my_df$var1[c(3, 7)]
+3 & 7
+# This doesn't work:
+my_df[3 & 7, ]
+# Use c() to select multiple rows
+my_df[c(3, 7), 1]
+my_df[c(3, 7), "var1"]
+# This says obs 3, column 7, and no idea what "var1" is.
+my_df[3, 7, "var1"]
+
+my_df[-3, ]
+# Can't do this:
+my_df[, -c("var1")]
+my_df[, -1]
+
+# Don't need a c() here:
+subset(my_df, select = -var1)
+# Multiple columns:
+subset(my_df, select = -c(var1, var2))
+subset(my_df, select = var1)
+subset(my_df, select = c(var1, var3))
+
+# 2nd argument is rows if we don't specify the argument name.
+subset(my_df, var3 > 0)
+# Subset()
+subset(my_df, var3 > 0 & var2 == "B")
+subset(my_df, subset = var3 > 0 & var2 == "B")
+
+# 2nd argument is which rows, 3rd is which columns)
+subset(my_df, var3 > 0, var2)
+subset(my_df, subset = var3 > 0, select = var2)
+
+# %in% refers to the values of the variable
+my_df$var1 %in% c(9, 7, 3)
+# This would be for certain observation #s:
+my_df$var[c(9, 7, 3)]
+
+# Same thing:
+my_df$var1 == 9 | my_df$var1 == 7 | my_df$var == 3
+
+subset(my_df, var1 %in% c(9, 7, 3) | var2 %in% "B")
+subset(my_df, var1 %in% c(9, 7, 3) & var2 %in% "B")
+
+# Needs backticks:
+?%in%
+  ?`%in%`
+# Can't use arbitrary functions/operators with %in%.
+subset(my_df, var1 %in% c(>10))
+
+# Challenge:
+# For column 3, all values less than or equal to 1.7.
+my_df$var3[my_df$var3 <= 1.7]
+# This gives us the TRUEs and FALSEs that we use to index
+# the $var3 result.
+my_df$var3 <= 1.7
+
+subset(my_df, var3 <= 1.7, var3)
+subset(my_df, var3 <= 1.7)
+class(subset(my_df, var3 <= 1.7, var3))
+
+my_df$var3[my_df$var3 <= 1.7]
+
+# Don't simplify result, give us a dataframe even if it could be simplified to a vector.
+my_df[my_df$var3 <= 1.7, "var3", drop=F]
+
+?`[`
+
+table(my_df$var1)
+table(my_df$var2)
+table(my_df$var3)
+
+table(my_df$var1, my_df$var2)
+
+table(my_df$var3 > -0.5, my_df$var2)
+prop.table(table(my_df$var3 > -0.5, my_df$var2))
+# Give a name to the rows and columns of the table.
+table("rows" = my_df$var3 > -0.5, "cols" = my_df$var2)
+
+# install.packages("ggplot2")
+library(ggplot2)
+qplot(my_df$var3)
+# Same thing, but don't have to run library():
+ggplot2::qplot(my_df$var3)
+hist(my_df$var3)
+
+####
+
+
+
+
+
+
+
+my_fac = factor(c("Beginner", "Inter", "Adv"))
+my_fac
+table(my_fac, as.numeric(my_fac))
+levels(my_fac)
+
+my_fac[as.numeric(my_fac) > which(levels(my_fac) == "Beginner")]
+
+my_fac2 = factor(c("Beginner", "Inter", "Adv"), levels = c("Beginner", "Inter", "Adv"))
+table(my_fac2, as.numeric(my_fac2))
+my_fac2[as.numeric(my_fac2) > which(levels(my_fac2) == "Beginner")]
+
+my_fac3 = factor(c("Beginner", "Inter", "Adv"), levels = c("Beginner", "Inter", "Adv"), ordered=T)
+table(my_fac3, as.numeric(my_fac3))
+
+
+
+
+
+install.packages("haven")
+install.packages(haven)
+
+library(haven)
+# ? does not generally work for packages:
+?haven
+# Use this to get help on a package.
+help(package=haven)
+
+require(gsppAwesomePackage)
+if (!require("haven")) install.packages("haven")
+if (!require(gsppBlah)) install.packages("gsppBlah")
+
+?require
+
+# Foreign is the older alternative.
+help(package=foreign)
+rm(list = ls())
+data = read_dta("http://www.ats.ucla.edu/stat/stata/examples/chp/p150.dta")
+class(data)
+?read_dta
+data
+str(data)
+
+# Convert from a table to just a data frame.
+data2 = as.data.frame(data)
+str(data2)
+class(data2)
+
+# Change the class to just data.frame
+class(data) = "data.frame"
+str(data)
+
+dim(data2)
+names(data2)
+str(data2)
+class(data2$w)
+class(data2$year)
+summary(data2)
+
+write_dta(data2, "p150.dta")
+write_dta(data2, "data/p150.dta")
+getwd()
+# We don't need to do this, but can go into a subfolder.
+setwd("assignment1")
+
+data2$stata_factor = factor(rep(c("male", "female", "no response"), 7), levels = c("no response", "female", "male"))
+class(data2$stata_factor)
+table(data2$stata_factor, as.numeric(data2$stata_factor))
+levels(data2$stata_factor)
+
+write_dta(data2, "stata_test.dta")
+rm(data2)
+data2 = read_dta("stata_test.dta")
+class(data2$stata_factor)
+is.factor(data2$stata_factor)
+
+# This is the bad way, we lost our labels :(
+data2$my_factor = as.factor(data2$stata_factor)
+class(data2$my_factor)
+data2$my_factor
+table(data2$my_factor)
+
+data2$my_factor = as_factor(data2$stata_factor)
+class(data2$my_factor)
+data2$my_factor
+table(data2$my_factor)
+
+if (!require(readr)) install.packages("readr")
+help(package=readr)
+
+data = read_tsv("http://www.ats.ucla.edu/stat/examples/chp/p189.txt")
+str(data)
+# read_csv() for a .csv file.
+
+# Import an Excel file using the readxl package.
+if (!require(readxl)) {
+  install.packages("readxl")
+  library(readxl) # (or require())
+}
+
+# Load the third sheet in an example xlsx file.
+read_excel("myfile.xlsx", 3)
+
+data = readxl::read_csv("http://is.gd/gspp_2016")
+
+# challenge:
+# how many columns and rows are there?
+dim(), nrow() and ncol()
+# What is the class of each column?
+str(data)
+# What are the means of each variable?
+summary(data)
+# Plot a histogram of one of the continuous variables.
+names(data)[2]
+qplot(data[, 2]) +
+  ggtitle("538 driving") +
+  xlab(names(data)[2])
+# How many observations per state are there?
+table(data[, 1])
+frequency(data[, 1])
+
+names(data)
+
+names(data)[1:5] <- c("state", "fatal_collisions", "pct_fat_col_speed",
+                      "pct_fat_col_alcohol", "pct_fat_col_distracted")
+names(data)
+names(data)[6:8] 
+
+# Check for missing values in a vector:
+is.na(c(1, 2, 3))
+is.na(c(1, NA, 3))
+
+is.na(data$fatal_collisions)
+# Percent of column that is NA (missing value):
+mean(is.na(data$fatal_collisions))
+
+names(data)[6:8] = c("previous_accidents", "premiums", "losses")
+# Average percentage missing values per column
+apply(data, MARGIN = 2, FUN = function(col) { mean(is.na(col)) })
+
+```
