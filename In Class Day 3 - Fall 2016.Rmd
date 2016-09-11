@@ -1,0 +1,274 @@
+```{r error=T}
+library(readr)
+data = read_csv("http://is.gd/gspp_2016")
+
+names(data)
+names(data) <- c("state", "fatal", "speeding", "alcohol", "not_distracted",
+                 "no_prev", "premium", "losses")
+
+# Another way to do the same thing by creating & saving a vector.
+new_column_names <- c("state", "fatal", "speeding", "alcohol", "not_distracted",
+                 "no_prev", "premium", "losses")
+new_column_names
+names(data) <- new_column_names
+
+# Review structure of data.
+dim(data)
+str(data)
+
+# Set some missing values.
+data[c(3, 7, 17, 37), -1] <- NA
+
+# Slight tangent, setting working directory to a subfolder of a project.
+getwd()
+if (file.exists("problem set 3")) setwd("problem set 3")
+getwd()
+# Go back to main project folder.
+setwd("..")
+# This should be our main project directory:
+getwd()
+
+# readr version with underscore:
+?read_csv
+# Old school:
+?read.csv
+# Don't automatically convert strings to factors.
+data = read.csv("blah.csv", stringsAsFactors = F)
+# But if we don't do that.
+data$var1 = as.character(data$var1)
+
+set.seed(1)
+x = c("male", "female", "other")
+n <- 30
+
+gender = sample(x, n, replace = T) 
+table(gender)
+sample(x, n, replace = F) 
+
+set.seed(5)
+gender2 = sample(x, n, replace = T, prob = c(0.4, 0.5, 0.1))
+table(gender2)
+class(gender2)
+
+# convert string to factor.
+gender_f <- factor(gender2)
+gender2
+gender_f
+class(gender_f)
+table(gender_f)
+table(gender_f, gender2)
+# Convert to a number based on the factor codes, and don't keep the labels/levels.
+gender_num = as.numeric(gender_f)
+gender_num
+gender_male = gender_num == 2
+gender_male
+# Indicator variable converted to 1/0
+gender_male = as.numeric(gender_num == 2)
+table(gender_f, gender_male)
+table(gender_f, gender_num)
+# Shows us the string values (or labels) in the order of the codes (1, 2, 3, ...).
+levels(gender_f)
+
+# Convert factor back to a string.
+gender_str <- as.character(gender_f)
+gender_str
+class(gender_str)
+table(gender_f, gender_str)
+
+# Work with strings.
+gender_str[gender_str == "female"]
+gender_f[gender_f == "female"]
+gender_f[as.numeric(gender_f) == 1]
+gender[]
+1:5
+gender[1:5]
+
+names(data)
+data$state[c(10, 47, 20)]
+
+gender[]
+
+data[c(10, 47, 20), c(1, 4)]
+
+# Row of data for Florida.
+data$state == "Florida"
+data[data$state == "Florida", ]
+# Reviewing numbers in brackets (observation #s at start of line)
+data$state == "Florida"
+
+names(data)
+# Return specific columns.
+data[data$state == "Florida", c("fatal", "losses")]
+subset(data, state == "Florida", select = c(fatal, losses))
+# You can use quotes, which is a little more normal:
+subset(data, state == "Florida", select = c("fatal", "losses"))
+# Select certain rows and certain columns.
+# Slow way:
+subset(data, state == "Florida" | state == "Colorado", select = c("state", "fatal", "losses", "state"))
+# Slightly faster way:
+subset(data, state %in% c("Florida", "Colorado"), c("state", "fatal", "losses", "state"))
+subset(data, fatal > 5, c("state", "fatal", "losses", "state"))
+
+# Compound logical expression.
+subset(data, state %in% c("Florida", "Colorado") & fatal > 15, c("state", "fatal", "losses", "state"))
+
+# Or can break down into multiple lines.
+rows = data$state %in% c("Florida", "Colorado") & data$fatal > 15
+rows
+subset(data, rows, c("state", "fatal", "losses", "state"))
+# Same thing:
+data[rows, c("state", "fatal", "losses", "state")]
+
+rows = with(data, state %in% c("Florida", "Colorado") & fatal > 15)
+# Attach() lets us not specify the dataframe, but we don't use it.
+attach(data)
+table(state)
+
+table(data$state)
+
+View(data)
+
+set.seed(1)
+rand_num <- runif(nrow(data))
+summary(rand_num)
+data2 = data
+# Using $ shortcut.
+data2$my_rand = rand_num
+# Same thing, but with bracket notation:
+data2[, "my_rand2"] = rand_num
+summary(data2)
+# We can also use cbind()
+data2 = cbind(data2, rand_num)
+# Not a good situation, we have duplicate column names.
+data2 = cbind(data2, rand_num)
+summary(data2)
+# 
+data2 = data
+data2 = cbind(data2, rand_num)
+# Specify name of the column we're adding:
+data2 = cbind(data2, my_rand3 = rand_num)
+summary(data2)
+# one last way to add a column.
+data3 = data.frame(data2, rand_num)
+summary(data3)
+# Example of error when row counts differ:
+data4 = data.frame(data2, rand_num[1:49])
+
+set.seed(1)
+extra_rows = data[sample(nrow(data), 5), ]
+extra_rows
+sample(10, 3)
+sample(1:10, 3)
+sample(seq(1, 10, by = 1), 3)
+
+# Add extra_rows to the bottom of data.
+larger_df = rbind(data, extra_rows)
+dim(larger_df)
+
+# Number of columns need to match.
+larger_df2 = rbind(data, extra_rows[, 1:7])
+
+# Make a single row from scratch:
+# Let's skip this, because our row has different types of data.
+
+library(ggplot2)
+
+# Run certain code if our dataset has more than 30 observations.
+if (nrow(data) > 30) {
+  # Run some lines of code.
+  cat("This is what happens when the IF statement is true.\n")
+  # We need to add print() whenever we want variables 
+  print(qplot(data$fatal))
+  print(data$state[1:5])
+  cat("done with if statement.\n")
+} 
+
+if (F) {
+  print("don't run this.")
+} else {
+  print("otherwise run this part.")
+}
+
+if (F) {
+  print("don't run this.")
+} else if (F) {
+  print("not gonna get run.")
+} else {
+  print("otherwise run this part.")
+}
+
+# T-statistic example.
+set.seed(1)
+t = rnorm(1)
+
+# Did our education reform have a positive impact?
+if (t > 0) {
+  cat("education reform worked!\n")
+  # ... generate plots.
+} else if (t < 0) {
+  cat("education reform reduced grades :( .\n")
+  # Let's fix this.
+  t = t * -1
+  t = abs(t)
+  cat("New t:", t, ". better!\n")
+}
+
+# Simple for loop example:
+# Convert from tibble to a normal dataframe.
+data_df = as.data.frame(data)
+class(data_df)
+# This is the most efficient version, allocate vector of the right size.
+state_name = rep("", 10)
+for (obs_i in 1:10) {
+  cat("Obs_i =", obs_i, "\n")
+  print(obs_i)
+  cat("State is", data_df[obs_i, "state"], "\n")
+  state_name[obs_i] = data_df[obs_i, "state"]
+}
+state_name
+
+# Slower because we are resizing the vector every time.
+state_name2 = NULL
+for (obs_i in 1:10) {
+  cat("Obs_i =", obs_i, "\n")
+  cat("State is", data_df[obs_i, "state"], "\n")
+  state_name2[obs_i] = data_df[obs_i, "state"]
+  cat("Length of state_name2 is:", length(state_name2), "\n")
+}
+state_name2
+
+# Also slow.
+state_name3 = c()
+for (obs_i in 1:nrow(data)) {
+  cat("Obs_i =", obs_i, "\n")
+  cat("State is", data_df[obs_i, "state"], "\n")
+  state_name3[obs_i] = data_df[obs_i, "state"]
+  cat("Length of state_name2 is:", length(state_name3), "\n")
+}
+state_name3
+
+string_vector = names(data)
+string_vector
+for (col_name in string_vector) {
+  cat("Working on column:", col_name, "\n")
+  cat("This is element #", which(string_vector == col_name), "\n")
+  print(summary(data[, col_name]))
+}
+string_vector == col_name
+which(string_vector == col_name)
+
+string_vector = names(data_df)
+string_vector
+for (col_i in 1:length(string_vector)) {
+  col_name = string_vector[col_i]
+  cat("Working on column:", col_name, "\n")
+  cat("This is element #", col_i, "\n")
+  if (class(data_df[, col_name]) %in% c("numeric", "integer")) {
+    print(summary(data_df[, col_name]))
+  } else {
+     # cat("The class is:", class(data_df[, col_name]), "\n")
+    print(table(data_df[, col_name]))
+  }
+}
+
+```
