@@ -40,3 +40,17 @@ Prepared for Public Policy 290 "Analytics for Government Policy" by Avi Feller, 
 * Creating functions: basic functions, function arguments, returning results, argument defaults
 
 Future content: day 3 would focus on data analysis using regression, apply and replicate, and merging files.
+
+## Resources
+
+* Books
+    * [R for Data Science](http://r4ds.had.co.nz/)
+    * [Advanced R](http://adv-r.had.co.nz/)
+    * [Efficient R](https://csgillespie.github.io/efficientR/)
+* Trainings
+    * [R Bootcamp](https://github.com/berkeley-scf/r-bootcamp-2017) by Chris Paciorek
+    * D-Lab's [R Fundamentals](https://github.com/dlab-berkeley/R-Fundamentals)
+* Courses
+    * Stat 133
+    * Stat 243 by Chris Paciorek
+
