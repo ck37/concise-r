@@ -6,11 +6,12 @@ Prepared for Public Policy 290 "Analytics for Government Policy" by Avi Feller, 
 
 ## Day 1
 
-[R Markdown file](https://github.com/ck37/r-intro-2016/blob/master/r-day1.Rmd). Topics covered:
+[R Markdown file](https://github.com/ck37/concise-r/blob/master/r-day1.Rmd). Topics covered:
 
 * Overview of RStudio and RMarkdown
 * Math functions
 * Assignment operator `<-` and `=`
+* Importing data: `getwd()`, rio `import()`
 * Environmental variables: `ls()` and `rm()`
 * Sequences: colon operator `:` and `seq()`
 * Vectors, vector functions `length()`, `sum()`, `mean()`, `max()`, `min()`, `summary()`
@@ -25,7 +26,6 @@ Prepared for Public Policy 290 "Analytics for Government Policy" by Avi Feller, 
 * Object types: `class()`, `str()`
 * Data analysis: `table()`, `prop.table()`
 * Visualization: `qplot()` from `ggplot2`.
-* Importing data: `getwd()`, haven `read_dta()`, and readr `read_csv()`, `read_tsv()`
 
 ## Day 2
 

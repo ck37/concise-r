@@ -224,6 +224,8 @@ R is built to make vectors easy to use. Let's make a vector of the numbers 1 thr
 ```{r}
 vec <- 1:100
 vec
+# Or in a single line:
+(vec <- 1:100)
 ```
 
 Because this is a lot of output, we should see the results go to the next line. When that happens, R will let you know which element number the line begins with. That's the number in the brackets at the beginning of each line.
