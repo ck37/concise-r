@@ -86,6 +86,8 @@ log(10) # e^x = 10
 exp(2.3) # This is e^2.3
 ```
 
+`sqrt`, `log`, and `exp` are all functions in R. To use a function we type out its name followed by open and closing parentheses. We can pass one or more arguments to the function by including them inside of the parentheses.
+
 # Assigning values to an R variable
 
 We can use variables (aka "objects") to store values and re-use them. Variable names are case-sensitive, and should only consist of letters, numbers, underscores, and periods. 
@@ -101,6 +103,12 @@ print(my_var)  # We can be more explicit and tell R to output the value.
 
 another.var = "periods can be in variable names but are kind of a weird R thing"
 another.var
+```
+
+If we enclose the assignment in parentheses we will also get the result printed.
+
+```{r}
+(assign_and_print = 37)
 ```
 
 We will get an error if we start using a variable name without assigning it a value.
@@ -121,11 +129,93 @@ We can remove objects with `rm()`
 rm(my_var)
 ```
 
+Check the environment tab and you will see that the variable is no longer listed.
+
 We can use = or <- to assign a value. <- is more traditional in R, but = is used in other languages like Stata or Python. There are other minor differences that we won't get into now.
 
 ```
 another_var = 3
 another_var
+```
+
+# Importing data
+
+We can use the `rio` package to import data from Stata, SPSS, SAS, CSV, or a huge number of other formats. Its name is short for "R Input/Output"
+
+First, we want to install it using `install.packages`:
+
+If you don't use quotes, R will look for a variable (aka "object") called "rio".
+
+```{r error=T}
+install.packages(rio)
+```
+
+So let's use quotes:
+
+```{r eval=F}
+install.packages("rio")
+```
+
+After installing a package, use `library` to load it. Quotes are optional.
+
+```{r}
+library(rio)
+# Either way is fine, but people tend to not use quotes for library().
+library("rio")
+```
+
+Then we will need to tell rio to download extra packages the first time we use it:
+
+```{r}
+install_formats()
+```
+
+To get help on a package, we can't always use `?` or `help` in exactly the same way as in a function. The package would need to specifically create a help page for its package name. But we're in luck that rio does this.
+
+```{r}
+# This will work because the rio package specifically made a function help
+# file for its package name.
+?rio
+help(rio)
+
+# This searches all help files but runs into an error.
+??rio
+```
+
+In general though we need to specify that we're looking for a package.
+
+```{r}
+help(package = rio)
+help(package = "rio")
+```
+
+We can use import() to import a Stata file on our computer or the web. `import()` checks the file extension and automatically determines how to open the file.
+
+```{r}
+data = import("https://stats.idre.ucla.edu/stat/stata/dae/binary.dta")
+class(data)     # Notice that it is a dataframe as well as two other classes.
+names(data)
+dim(data)
+summary(data)
+```
+
+To import data from our computer, we would want to know what folder R is running from - our working directory.
+
+```{r}
+getwd()
+```
+
+If we put the .dta file into that directory, then we can load it by just specifying the file name.
+
+```{r eval=F}
+# R will look for example.dta in the folder displayed by getwd().
+data = import("example.dta")
+```
+
+If the file is in another directory, we will need to tell R exactly where to look.
+
+```{r eval=F}
+data <- import("/Users/username/Downloads/downloaded_file.dta")
 ```
 
 # Vectors
@@ -632,84 +722,6 @@ library(ggplot2)
 qplot(my_dataframe$var3)
 ```
 
-# Importing data
-
-We can use the `haven` package to import data from Stata, SPSS, or SAS (good idea Avi).
-
-First, we want to install it using `install.packages`:
-
-```{r eval=F}
-install.packages("haven")
-```
-
-If you forget the quotes, R will look for a variable called "haven".
-
-```{r error=T}
-install.packages(haven)
-```
-
-After installing a package, use `library` to load it. Quotes are optional.
-
-```{r}
-library(haven)
-library("haven")  # Either way is fine.
-```
-
-To get help on a package, we can't use `?` or `help` in exactly the same way as in a function.
-
-```{r}
-?haven
-help(haven)
-??haven
-```
-
-Instead we need to specify that we're looking for a package.
-
-```{r}
-help(package=haven)
-```
-
-We can use read_dta to import a Stata file on our computer or the web.
-
-```{r}
-data = read_dta("http://www.ats.ucla.edu/stat/stata/examples/chp/p150.dta")
-class(data)     # Notice that it is a dataframe as well as two other classes.
-names(data)
-dim(data)
-summary(data)
-```
-
-To import data from our computer, we would want to know what folder R is running from - our working directory.
-
-```{r}
-getwd()
-```
-
-If we put the .dta file into that directory, then we can load it by just specifying the file name.
-
-```{r eval=F}
-# R will look for example.dta in the folder displayed by getwd().
-data = read_dta("example.dta")
-```
-
-If the file is in another directory, we will need to tell R exactly where to look.
-
-```{r eval=F}
-data <- read_dta("/Users/username/Downloads/downloaded_file.dta")
-```
-
-If we have a CSV or tab-delimited file, we can use the readr package.
-
-```{r eval=F}
-install.packages("readr")
-```
-
-```{r}
-library(readr)
-# Read a tab-delimited file - this one on educational expenditures.
-data = read_tsv("http://www.ats.ucla.edu/stat/examples/chp/p189.txt")
-# Use read_csv for CSV files.
-```
 
 # Questions / Review / Additional Dataset Exercises
 
