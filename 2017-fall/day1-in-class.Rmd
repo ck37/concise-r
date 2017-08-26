@@ -1,0 +1,176 @@
+---
+title: "R Training Day 1"
+author: "Chris Kennedy"
+date: "8/25/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## New headline
+
+Checking about new changes.
+
+```{r}
+2 + 3
+1:3
+c("first element", "2nd element")
+
+3 * 3 * 3 * 3 * 3
+3^7
+sqrt(16)
+log(10)
+exp(2.3)
+mean(10)
+mean(10, 11, 12)
+mean(c(10, 11, 12))
+my_numbers <- c(10, 11, 12)
+my_numbers2 = c(10, 11, 12)
+my_numbers
+```
+Now I'm going to print my_numbers.
+```{r error=TRUE}
+# Display the values of the my_numbers vector.
+print(my_numbers)
+# This outputs my_numbers2.
+print(my_numbers2) 
+
+another.var <- c(5, 7, 9, 11)
+another.var
+(another.var <- c(5, 7, 9, 11))
+
+(blah = "program evaluation")
+
+?c
+c(1, 7:9)
+c(1:5, 10.5, "next")
+c(1, 2, c("next", "one"))
+
+var = c(1:5, 10.5, "next")
+class(var)
+class(1:5)
+?class
+
+ls()
+
+class(var)
+var = c(1:5, 10.5, "next")
+
+rm(my_numbers, my_numbers2)
+ls()
+
+never_made_this_one
+
+install.packages(rio)
+install.packages("rio")
+library(rio)
+install_formats()
+
+help(package = rio)
+print("test")
+
+data = import("https://stats.idre.ucla.edu/stat/stata/dae/binary.dta")
+# Typo gives a slightly unhelpful error:
+data = import("https://stats.idre.ucla.edu/stat/stata/dae/biny.dta")
+```
+## Break time until 1:50pm
+
+```{r error=TRUE}
+names(data)
+colnames(data)
+dim(data)
+nrow(data)
+ncol(data)
+summary(data)
+# sum() is used to calculate the sum of a vector:
+# (unlike Stata)
+sum(c(10, 5, 1))
+str(data)
+head(data)
+?head
+head(data, 2)
+head(x = data, n = 2)
+head(data, n = 10)
+data
+data[]
+data[15, ]
+data[15, "gpa"]
+data[15, "gpa", "admit"]
+data[15, c("gpa", "admit")]
+columns_to_pick = c("gpa", "admit")
+data[15, columns_to_pick]
+drop_f = data[15, "gpa", drop = F]
+drop_f
+class(drop_f)
+drop_t = data[15, "gpa", drop = T]
+drop_t
+class(drop_t)
+data[15, "gpa", drop = TRUE]
+data[, "blah"]
+
+tail(data)
+data[, "gre"]
+data[, c("gre")]
+data$gre
+mean(data$gre)
+summary(data$gre)
+sd(data$gre)
+hist(data$gre)
+
+install.packages("ggplot2")
+library(ggplot2)
+qplot(data$gre)
+qplot(data$gre) + theme_bw()
+qplot(data$gre, data$gpa)
+
+table(data$admit)
+
+data$admit == 1
+table(data$admit == 1)
+table(data$admit == 1, data$admit)
+
+data[data$admit == 1,]
+these_rows = data$admit == 1
+these_rows
+# Same thing:
+class(data)
+class(these_rows)
+data
+length(these_rows)
+data[these_rows, ]
+# People with admit = 1, multiply gre score by 10
+# and save the result.
+data
+data$new_gre = data$gre
+ls()
+names(data)
+cor(data$gre, data$new_gre)
+cor(data)
+
+mean(data[data$admit == 1, "gre"])
+hist(data[data$admit == 1, "gre"])
+qplot(data[data$admit == 1, "gre"])
+
+# Same result, here we subsetted a vector that we got from data$gre.
+qplot(data$gre[data$admit == 1])
+
+data[data$admit == 1, "new_gre"] = data[data$admit == 1, "new_gre"] * 10
+summary(data[data$admit == 1, ])
+summary(data[data$admit == 0, ])
+
+```
+
+This is normal text.
+
+## What are these weird characters?
+
+* Parentheses () - these can group parts of code, and are used after a function name to run that function. We pass in arguments inside of those parentheses. Eg: `r mean(c(5, 10))`. (Also example of inline R code.)
+* Brackets [] - subsetting dataframes or vectors. Dataframe needs two arguments: first argument is which rows you want, second is which columns. A vector has only one argument for which elements you want.
+* Dollar sign $ - shortcut to choose one variable (column) from your dataframe and get its values as a vector.
+
+```{r}
+# Examples of using backticks to get help on operators:
+?`$`
+?`(`
+```
