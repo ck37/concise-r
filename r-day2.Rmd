@@ -18,8 +18,8 @@ library(readr)
 # https://raw.githubusercontent.com/fivethirtyeight/data/master/bad-drivers/bad-drivers.csv
 data = read_csv("http://is.gd/gspp_2016")
 names(data)
-names(data) <- c("state", "fatal", "speeding", "alcohol", "not_distracted", "no_prev",
-                    "premium", "losses")
+names(data) <- c("state", "fatal", "speeding", "alcohol",
+                 "not_distracted", "no_prev", "premiums", "losses")
 str(data)
 ```
 
@@ -50,7 +50,7 @@ sum(is.na(data[, "fatal"]))
 sum(is.na(data[, "speeding"]))
 ```
 
-Let's see a few values to missing for all columns except state.
+Let's set a few values to missing for all columns except state.
 
 ```{r}
 data[c(3, 7, 17, 37), -1] <- NA
@@ -95,6 +95,11 @@ class(state)
 
 premiums = data$premiums
 
+# Not right - do you remember why?
+state_and_premiums = data.frame(cbind(data$state, data$premiums))
+str(state_and_premiums)
+
+# Better:
 state_and_premiums = data.frame(cbind(data$state, data$premiums))
 class(state_and_premiums)
 ```
